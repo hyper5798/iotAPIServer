@@ -30,6 +30,7 @@ if (config.isCloudantDb) {
 
 var checkEvent = {};
 var checkMap= {};
+var checkToken = {};
 init();
 
 module.exports = {
@@ -482,6 +483,25 @@ function checkAndParseToken (token, res, callback) {
     actInfo['cpId'] = Number(tArr[3]);
     actInfo['roleId'] = Number(tArr[4]);
     actInfo['dataset'] = Number(tArr[5]);
+    var d = new Date()
+    var nowSeconds = Math.round(d.getTime() / 1000)
+    var loginSeconds = parseInt(ts)
+    let subVal = nowSeconds - loginSeconds;
+    if(checkToken[tArr[2]]) {
+        let tokenData = checkToken[tArr[2]];
+        if(tokenData.token == token) {
+            if( subVal > tokenData.period || subVal < 0 ){
+                res.send({
+                    "responseCode" : '404',
+                    "responseMsg" : 'Token expired'
+                });
+                delete checkToken[tArr[2]];
+                return callback(true);
+            } else {
+                return callback(null, tokenData.data);
+            }
+        }
+    } 
     
 	async.waterfall([
 		function(next){
@@ -498,7 +518,7 @@ function checkAndParseToken (token, res, callback) {
 		},
 		function(rst1, next){
 			mysqlTool.getProperties('TOKEN_EXPIRE', function(err2, result2){
-                next(err2, [rst1, result2]);
+                next(err2, [rst1, result2[0]]);
 			});
 		}
 	], function(errs, results){
@@ -519,11 +539,7 @@ function checkAndParseToken (token, res, callback) {
             return callback(true);
         }
         try {
-            var period = Number(results[1].p_value);
-            var d = new Date()
-            var nowSeconds = Math.round(d.getTime() / 1000)
-            var loginSeconds = parseInt(ts)
-            let subVal = nowSeconds - loginSeconds;
+            var period = Number(results[1].p_value);      
             if( subVal > period || subVal < 0 ){
                 res.send({
                     "responseCode" : '404',
@@ -553,6 +569,7 @@ function checkAndParseToken (token, res, callback) {
                         "OAFlg" : OAFlg,
                         "userInfo" : actInfo
                     };
+                    checkToken[tArr[2]] = {token: token, data: data, period: period};
                     return callback(null, data);
                 } else {
                     res.send({
