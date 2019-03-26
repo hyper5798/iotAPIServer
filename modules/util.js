@@ -12,6 +12,7 @@ var JsonFileTools = require('../modules/jsonFileTools.js');
 var linebot = require('linebot');
 var userPath = './public/data/friend.json';
 var adminPath = './public/data/admin.json';
+var mapPath = './public/data/map.json';
 //Jason modify on 2018.05.06 for switch local and cloud db -- start
 var dbMap = null;
 var dbEvent = null;
@@ -28,8 +29,11 @@ if (config.isCloudantDb) {
 //Jason modify on 2018.05.06 for switch local and cloud db -- end
 
 var checkEvent = {};
+var checkMap= {};
+init();
 
 module.exports = {
+    init,
     decode,
     encode,
     genToken,
@@ -54,6 +58,21 @@ module.exports = {
     sendAdminLineMessage,
     getType,
     getCurrentUTCDate
+}
+
+function init() {
+    dbMap.find({}).then(function(docs) {
+        if(docs) {
+            for(let i=0; i<docs.length;++i){
+                let map = docs[i];
+                checkMap[map.deviceType] = map;
+            }
+            JsonFileTools.saveJsonToFile(mapPath, checkMap);
+        }
+        
+    }, function(reason) {
+        console.log(getCurrentTime() + ' init err : ' + reason);
+    });
 }
 
 function httpGet(url, username, password) {
@@ -214,10 +233,11 @@ function parseMsgd(message, callback) {
     //Parse data
     if(mExtra.fport){
         var mType = mExtra.fport.toString();
-        dbMap.findLast({'deviceType': mType}).then(function(doc) {
+        let map = checkMap[mType];
+        // dbMap.findLast({'deviceType': mType}).then(function(doc) {
             // console.log('docs : ' + typeof doc);
-            if(doc) {
-                var mInfo = getTypeData(mData,doc);
+            if(map) {
+                var mInfo = getTypeData(mData,map);
                 if (debug) {
                     console.log(getCurrentTime() + 'Information : ' + JSON.stringify(mInfo));
                 }
@@ -253,12 +273,12 @@ function parseMsgd(message, callback) {
                 return callback({"error" : "No map of type " + mType});
             }
             
-        }, function(reason) {
+    /*    }, function(reason) {
             if (debug) {
                 console.log(new Date() + 'parseMsgd findLast err : ' + reason);
             }
             return callback({"error": reason});
-        });
+        });*/
     } else {
         if (debug) {
             console.log(new Date() + 'parseMsgd fport is not exist');

@@ -24,10 +24,10 @@ var auth = require('http-auth');
 var morgan = require('morgan');
 var cors = require('cors');
 var mqttSubClient = require('./modules/mqttSubClient.js');
-var basic = auth.basic({
+/*var basic = auth.basic({
 	realm: "Node JS API",
     file: "./keys.htpasswd" // gevorg:gpass, Sarah:testpass ...
-});
+});*/
 // Jason add for line-bot notify on 2018.04.24 -- start 
 var path = require('path');
 var linebot = require('linebot');

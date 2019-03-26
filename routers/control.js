@@ -18,7 +18,7 @@ socket.on('update_command_status', function (data) {
 	var obj = cmdStatus[data.mac];
 	if(obj.number == data.number) {
 		if( (obj.command == "up" || obj.command == "stop" || obj.command == "down") && (data.command == 129) )  {
-			//obj.status = true;
+			obj.status = true;
 		}
 	}
 });
@@ -173,7 +173,7 @@ module.exports = (function() {
 					});	
 				} else {
 					res.send({
-						"responseCode" : '001',
+						"responseCode" : '995',
 						"responseMsg" : 'Controller did not respond'
 					});
 				}
