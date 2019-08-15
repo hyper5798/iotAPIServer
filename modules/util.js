@@ -210,23 +210,36 @@ function parseMsgd(message, callback) {
         var timestamp = recvDate.getTime();
         var tMoment = (moment.unix(timestamp/1000)).tz(config.timezone);
         var mDate = tMoment.format('YYYY-MM-DD HH:mm:ss');*/
-        var utcMoment = moment.utc(obj.time);
+        var mRecv;
+        if(obj.time) {
+            mRecv = obj.time;
+        } else {
+            mRecv = getCurrentUTCDate();
+        }
+        var utcMoment = moment.utc(mRecv);
         var timestamp = utcMoment.valueOf();
         var tMoment = (moment.unix(timestamp/1000)).tz(config.timezone);
         var mDate = tMoment.format('YYYY-MM-DD HH:mm:ss');
         // var mRecv = obj.time;
         // var mRecv = new Date( utcMoment.format("YYYY-MM-DDTHH:mm:ss") );
-        var mRecv = obj.time;
+        
     
-        // console.log('mRecv : '+  mRecv);
-        // console.log('mDate : '+ mDate);
-        var mExtra = {'gwip': obj.gwip,
+        console.log('mRecv : '+  mRecv);
+        console.log('mDate : '+ mDate);
+        var mExtra;
+        if(obj.time) {
+            mExtra = {'gwip': obj.gwip,
                   'gwid': obj.gwid,
                   'rssi': obj.rssi,
                   'snr' : obj.snr,
                   'fport': obj.fport,
                   'frameCnt': obj.frameCnt,
                   'channel': obj.channel};
+        } else {
+            mExtra = {
+                  'fport': obj.fport,
+                  'frameCnt': obj.frameCnt};
+        }
     } catch (error) {
         return callback({"error": "message is unable paser"});
     }
@@ -245,7 +258,7 @@ function parseMsgd(message, callback) {
                 
                 if(mInfo){
                     var msg = {macAddr: mMac, data: mData, timestamp: timestamp, recv: mRecv, date: mDate, extra: mExtra};
-                    console.log('**** '+msg.date +' mac:'+msg.macAddr+' => data:'+msg.data+'\ninfo:'+JSON.stringify(mInfo));
+                    console.log('**** '+msg.date +' mac:'+msg.macAddr+' => data:'+msg.data+'\nfport:'+mExtra.fport+' info:'+JSON.stringify(mInfo));
                     msg.information=mInfo;
                     
                     if (debug) {
