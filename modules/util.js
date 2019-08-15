@@ -63,6 +63,7 @@ module.exports = {
 
 function init() {
     dbMap.find({}).then(function(docs) {
+        checkMap = {};
         if(docs) {
             for(let i=0; i<docs.length;++i){
                 let map = docs[i];

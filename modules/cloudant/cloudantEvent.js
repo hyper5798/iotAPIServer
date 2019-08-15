@@ -35,7 +35,8 @@ var eventObj2 = {
   module.exports = {
     create,
     findLast,
-    find
+    find,
+    remove
 }
 
 function findLast(json){
@@ -133,30 +134,12 @@ function create(json){
     })
 }
   
-/* function remove(json){
-    var myobj = JSON.parse(JSON.stringify(eventObj)); 
-    myobj.selector.macAddr = json.macAddr;
-    console.log('delProfile myobj : ' + JSON.stringify(myobj));
+function remove(myDoc){
     return new Promise(function (resolve, reject) {
-        dbUtil.queryDoc(myobj).then(function(value) {
-            var myList = [];
-            if(value.docs.length > 0){
-                myList = value.docs;
-            }
-            var myDoc;
-            if( myList.length > 0) {
-                myDoc = myList[0];
-                dbUtil.removeDoc(myDoc._id, myDoc._rev).then(function(value) {
-                    resolve('ok');
-                }, function(reason) {
-                    reject(reason);
-                }); 
-            } else {
-                reject('Can not find map');
-            }
-            
-          }, function(reason) {
+        dbUtil.removeDoc(myDoc._id, myDoc._rev).then(function(value) {
+            resolve('ok');
+        }, function(reason) {
             reject(reason);
-          });
+        }); 
     })
-} */
+}

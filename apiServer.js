@@ -214,10 +214,15 @@ io.sockets.on('connection', function (socket) {
     mqttClient.sendMessage(topic, message);
   });
 
-  socket.on('update_command_status', function (data) {
-	console.log(JSON.stringify(data));  
+  socket.on('reply_command_status', function (data) {
+	  console.log('reply_command_status' + JSON.stringify(data));  
     socket.broadcast.emit('update_command_status', data);
-  });
+	});
+
+	socket.on('reply_pin_status', function (data) {
+		console.log('reply_pin_status' + JSON.stringify(data));  
+		socket.broadcast.emit('update_pin_status', data);
+	});
 
   socket.on('disconnect', function () {
     console.log('???? socket disconnect id : ' + socket.id);
