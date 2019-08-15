@@ -18,6 +18,7 @@ function scheduleCronstyle(){
 }
 
 scheduleCronstyle();
+//cleanCloudantDB();
 
 function cleanCloudantDB() {
 	var json = {"category": "event","recv":{"$lte": "2019-01-15 00:00:00Z+8"}};
