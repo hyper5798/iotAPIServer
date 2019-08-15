@@ -135,7 +135,9 @@ function saveStringToFile(mpath,mstring){
 function saveJaonFile(path,obj){
     console.log("Debug jsonFileTools saveFile -> path: "+ path);
     var json = JSON.stringify(obj);
-    fs.writeFile(path, json, 'utf8');
+    fs.writeFile(path, json, 'utf8',function(err){
+        console.log(err);
+    });
 }
 
 function getJaonFile(path){
