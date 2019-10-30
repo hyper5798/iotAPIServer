@@ -23,7 +23,7 @@
     "mqtt": "^2.16.0",
     "mysql": "~2.9.0",
     "node-schedule": "^1.3.0",
-    "sequelize": "~3.6.0",
+    "sequelize": "~5.15.1",
     "socket.io": "^2.2.0"
   },
   "scripts": {
