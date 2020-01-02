@@ -8,8 +8,12 @@ var json2csv = require('json2csv');
 var fs = require('fs');
 var axios = require('axios');
 //Jason modify on 2018.05.06 for switch local and cloud db -- start
-var dbEvent = require('../modules/mongo/mongoDevice.js');
-
+var dbEvent = null;
+if (config.isCloudantDb) {
+    dbEvent = require('../modules/cloudant/cloudantEvent.js');
+} else {
+    dbEvent = require('../modules/mongo/mongoDevice.js');
+}
 //Jason modify on 2018.05.06 for switch local and cloud db -- end
 
 function findDevices (json, req, res) {

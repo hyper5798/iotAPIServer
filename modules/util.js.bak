@@ -14,11 +14,18 @@ var userPath = './public/data/friend.json';
 var adminPath = './public/data/admin.json';
 var mapPath = './public/data/map.json';
 //Jason modify on 2018.05.06 for switch local and cloud db -- start
-
-var dbMap = require('./mongo/mongoMap.js');
-var dbEvent = require('./mongo/mongoDevice.js');
-var dbLog = require('../modules/mongo/mongoLog.js');
-
+var dbMap = null;
+var dbEvent = null;
+var dbLog = null;
+if (config.isCloudantDb) {
+    dbMap = require('./cloudant/cloudantMap.js');
+    dbEvent = require('./cloudant/cloudantEvent.js');
+    dbLog = require('./cloudant/cloudantLog.js');
+} else {
+    dbMap = require('./mongo/mongoMap.js');
+    dbEvent = require('./mongo/mongoDevice.js');
+    dbLog = require('../modules/mongo/mongoLog.js');
+}
 //Jason modify on 2018.05.06 for switch local and cloud db -- end
 
 var checkEvent = {};
