@@ -5,7 +5,7 @@
   "main": "apiServer.js",
   "dependencies": {
     "async": "^2.6.0",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "body-parser": "~1.0.1",
     "cloudant": "^1.10.0-NOTICE",
     "cors": "^2.8.4",
