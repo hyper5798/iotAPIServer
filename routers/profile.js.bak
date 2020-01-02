@@ -4,7 +4,12 @@ var async  = require('async');
 var config = require('../config');
 var util = require('../modules/util.js');
 //Jason modify on 2018.05.06 for switch local and cloud db -- start
-var dbProfile = require('../modules/mongo/mongoProfile.js');
+var dbProfile = null;
+if (config.isCloudantDb) {
+    dbProfile = require('../modules/cloudant/cloudantProfile.js');
+} else {
+    dbProfile = require('../modules/mongo/mongoProfile.js');
+}
 //Jason modify on 2018.05.06 for switch local and cloud db -- end
 
 module.exports = (function() {

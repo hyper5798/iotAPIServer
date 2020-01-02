@@ -178,7 +178,7 @@ var port = process.env.PORT || config.port;
 var server = http.createServer(app);
 server.listen(port);
 
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server.listen(port));
 
 io.sockets.on('connection', function (socket) {
   // mySocket = socket;

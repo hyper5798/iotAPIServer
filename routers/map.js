@@ -4,12 +4,7 @@ var async  = require('async');
 var config = require('../config');
 var util = require('../modules/util.js');
 //Jason modify on 2018.05.06 for switch local and cloud db -- start
-var dbMap = null;
-if (config.isCloudantDb) {
-    dbMap = require('../modules/cloudant/cloudantMap.js');
-} else {
-    dbMap = require('../modules/mongo/mongoMap.js');
-}
+var dbMap = require('../modules/mongo/mongoMap.js');
 //Jason modify on 2018.05.06 for switch local and cloud db -- end
 
 module.exports = (function() {

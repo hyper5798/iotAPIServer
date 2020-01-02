@@ -4,7 +4,7 @@ var util = require('./util.js');
 var schedule = require('node-schedule');
 var io = require('socket.io-client');
 var socket = io.connect('http://localhost:8000', {reconnect: true});
-var dbEvent = require('../modules/mongo/mongoDevice.js');
+var dbEvent = require('../modules/cloudant/cloudantEvent.js');
 
 socket.on('connect',function(){
     socket.emit('mqtt_sub','**** mqtt_sub socket cient is ready');

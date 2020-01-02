@@ -8,8 +8,12 @@ var json2csv = require('json2csv');
 var fs = require('fs');
 var axios = require('axios');
 //Jason modify on 2018.05.06 for switch local and cloud db -- start
-var dbLog = require('../modules/mongo/mongoLog.js');
-
+var dbLog = null;
+if (config.isCloudantDb) {
+    dbLog = require('../modules/cloudant/cloudantLog.js');
+} else {
+    dbLog = require('../modules/mongo/mongoLog.js');
+}
 //Jason modify on 2018.05.06 for switch local and cloud db -- end
 
 //Mysql database API
